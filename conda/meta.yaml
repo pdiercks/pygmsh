@@ -12,7 +12,7 @@ build:
 
 requirements:
     host:
-        - python >=3.6
+        - python
         - setuptools
         - numpy >=1.9
         - meshio >=4.0
