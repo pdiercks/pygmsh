@@ -30,6 +30,7 @@ class Geometry:
     def __init__(self, gmsh_major_version=None):
         self._EXTRUDE_ID = 0
         self._BOOLEAN_ID = 0
+        self._DUPLICATE_ID = 0
         self._ARRAY_ID = 0
         self._FIELD_ID = 0
         self._GMSH_MAJOR = gmsh_major_version
@@ -1011,20 +1012,35 @@ class Geometry:
         )
         return vol
 
-    def translate(self, input_entity, vector):
+    def translate(self, input_entity, vector, duplicate=False):
         """Translates input_entity itself by vector.
 
         Changes the input object.
         """
         d = {1: "Line", 2: "Surface", 3: "Volume"}
-        self._GMSH_CODE.append(
-            "Translate {{{}}} {{ {}{{{}}}; }}".format(
+        entity = "{}{{{}}};".format(d[input_entity.dimension], input_entity.id)
+        name = ""
+        equals = ""
+        semicolon = ""
+
+        if duplicate:
+            self._DUPLICATE_ID += 1
+            name = f"duplicate{self._DUPLICATE_ID}[]"
+            equals = " = "
+            semicolon = ";"
+            entity = f"Duplicata{{{entity}}}"
+
+        # translation operation
+        to = "Translate {{{}}} {{{}}}".format(
                 ", ".join([str(co) for co in vector]),
-                d[input_entity.dimension],
-                input_entity.id,
+                entity
             )
-        )
-        return
+
+
+        self._GMSH_CODE.append(name + equals + to + semicolon)
+
+        mapping = {"Line": LineBase, "Surface": SurfaceBase, "Volume": VolumeBase}
+        return mapping[d[input_entity.dimension]](id0=name)
 
     def rotate(self, input_entity, point, angle, axis):
         """Rotate input_entity around a given point with a give angle.

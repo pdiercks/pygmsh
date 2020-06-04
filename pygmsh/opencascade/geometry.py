@@ -17,6 +17,7 @@ class Geometry(bl.Geometry):
     def __init__(self, characteristic_length_min=None, characteristic_length_max=None):
         super().__init__()
         self._BOOLEAN_ID = 0
+        self._DUPLICATE_ID = 0
         self._EXTRUDE_ID = 0
         self._GMSH_CODE = [
             f"// This code was created by pygmsh v{__version__}.",
