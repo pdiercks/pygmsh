@@ -10,10 +10,10 @@ def test_builtin_duplicate():
     geom.add_raw_code("Geometry.CopyMeshingMethod = 1;")
 
     # built-in square
-    p0 = geom.add_point([0.0, 0.0, 0], 0.01)
-    p1 = geom.add_point([1.0, 0.0, 0], 0.01)
-    p2 = geom.add_point([1.0, 1.0, 0], 0.01)
-    p3 = geom.add_point([0.0, 1.0, 0], 0.01)
+    p0 = geom.add_point([0.0, 0.0, 0], 0.1)
+    p1 = geom.add_point([1.0, 0.0, 0], 0.1)
+    p2 = geom.add_point([1.0, 1.0, 0], 0.1)
+    p3 = geom.add_point([0.0, 1.0, 0], 0.1)
     l0 = geom.add_line(p0, p1)
     l1 = geom.add_line(p1, p2)
     l2 = geom.add_line(p2, p3)
