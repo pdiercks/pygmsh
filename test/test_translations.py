@@ -32,21 +32,6 @@ def test_translation2d():
     assert np.abs(compute_volume(mesh) - surf) < 1e-3 * surf
     return
 
-def test_translate_duplicate2d():
-    """Translation and duplication of a surface object"""
-    geom = pygmsh.opencascade.Geometry(0.1, 0.1)
-    geom.add_raw_code("Geometry.CopyMeshingMethod=1;")
-    square = geom.add_rectangle([0.0, 0.0, 0.0], 1.0, 1.0)
-    other = geom.translate(square, [1.0, 0.0, 0.0], duplicate=True)
-    another = geom.translate(square, [0.0, 1.0, 0.0], duplicate=True)
-    and_another = geom.translate(square, [1.0, 1.0, 0.0], duplicate=True)
-    geom.boolean_union([square, other, another, and_another])
-
-    mesh = pygmsh.generate_mesh(geom)
-    area = 4.0
-    assert np.abs(compute_volume(mesh) - area) < 1e-3 * area
-    return
-
 
 def test_translation3d():
     """Translation of a volume object."""
@@ -64,23 +49,8 @@ def test_translation3d():
     assert np.abs(compute_volume(mesh) - surf) < 2e-2 * surf
     return
 
-def test_translate_duplicate3d():
-    """Translation and duplciation of a volume object"""
-    geom = pygmsh.opencascade.Geometry(0.1, 0.1)
-    cube = geom.add_box([0, 0, 0], [1, 1, 1])
-    other = geom.translate(cube, [1.0, 0, 0], duplicate=True)
-
-    geom.boolean_union([cube, other])
-
-    mesh = pygmsh.generate_mesh(geom)
-    vol = 2
-    assert np.abs(compute_volume(mesh) - vol) < 1e-3 * vol
-    return
-
 
 if __name__ == "__main__":
     # test_translation1d()
     test_translation2d()
-    test_translate_duplicate2d()
     test_translation3d()
-    test_translate_duplicate3d()
